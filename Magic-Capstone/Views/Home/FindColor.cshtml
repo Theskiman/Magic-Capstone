@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewData["Title"] = "FindColor";
+}
+
+<link rel="stylesheet" href="~/css/TaskCardStyle.css">
+
+<h1>Find By Color</h1>
+
+<div class="cardflex">
+
+
+    @foreach (var item in Model.cards)
+    {
+        if (item.imageUrl != null)
+        {
+
+            <div>
+                <div class="card">
+                    <img class="img-responsive" src=@item.imageUrl id="magic" />
+                </div>
+            </div>
+
+        }
+    }
+</div>

@@ -1,0 +1,73 @@
+﻿@model Magic_Capstone.Models.Card
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Card</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ConditionId" class="control-label"></label>
+                <select asp-for="ConditionId" class ="form-control" asp-items="ViewBag.ConditionId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="name" class="control-label"></label>
+                <input asp-for="name" class="form-control" />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="manaCost" class="control-label"></label>
+                <input asp-for="manaCost" class="form-control" />
+                <span asp-validation-for="manaCost" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="type" class="control-label"></label>
+                <input asp-for="type" class="form-control" />
+                <span asp-validation-for="type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="rarity" class="control-label"></label>
+                <input asp-for="rarity" class="form-control" />
+                <span asp-validation-for="rarity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="set" class="control-label"></label>
+                <input asp-for="set" class="form-control" />
+                <span asp-validation-for="set" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="setName" class="control-label"></label>
+                <input asp-for="setName" class="form-control" />
+                <span asp-validation-for="setName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="text" class="control-label"></label>
+                <input asp-for="text" class="form-control" />
+                <span asp-validation-for="text" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="imageUrl" class="control-label"></label>
+                <input asp-for="imageUrl" class="form-control" />
+                <span asp-validation-for="imageUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

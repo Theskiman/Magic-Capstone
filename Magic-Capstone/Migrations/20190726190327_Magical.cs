@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Magic_Capstone.Data.Migrations
+namespace Magic_Capstone.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class Magical : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,11 +40,27 @@ namespace Magic_Capstone.Data.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    FirstName = table.Column<string>(nullable: false),
+                    LastName = table.Column<string>(nullable: false),
+                    StreetAddress = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "conditions",
+                columns: table => new
+                {
+                    ConditionId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ConitionName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_conditions", x => x.ConditionId);
                 });
 
             migrationBuilder.CreateTable(
@@ -153,6 +169,115 @@ namespace Magic_Capstone.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "decks",
+                columns: table => new
+                {
+                    DeckId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    DeckName = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_decks", x => x.DeckId);
+                    table.ForeignKey(
+                        name: "FK_decks_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "cards",
+                columns: table => new
+                {
+                    CardId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    name = table.Column<string>(nullable: true),
+                    ConditionId = table.Column<int>(nullable: false),
+                    text = table.Column<string>(nullable: true),
+                    manaCost = table.Column<string>(nullable: true),
+                    type = table.Column<string>(nullable: true),
+                    Rarity = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_cards", x => x.CardId);
+                    table.ForeignKey(
+                        name: "FK_cards_conditions_ConditionId",
+                        column: x => x.ConditionId,
+                        principalTable: "conditions",
+                        principalColumn: "ConditionId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_cards_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "cardDecks",
+                columns: table => new
+                {
+                    CardDeckId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CardId = table.Column<int>(nullable: false),
+                    DeckId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_cardDecks", x => x.CardDeckId);
+                    table.ForeignKey(
+                        name: "FK_cardDecks_cards_CardId",
+                        column: x => x.CardId,
+                        principalTable: "cards",
+                        principalColumn: "CardId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_cardDecks_decks_DeckId",
+                        column: x => x.DeckId,
+                        principalTable: "decks",
+                        principalColumn: "DeckId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "StreetAddress", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "00000000-ffff-ffff-ffff-ffffffffffff", 0, "0cea28a3-c3d8-411e-b9db-0668ceb779fe", "admin@admin.com", true, "Clifton", "Matuszewski", false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEEPBikpeUv8fovO4FXzu2V/rOMLQuDX7VWNV+VOt4475vWlYEL8HNSf3lGZhcsx/QQ==", null, false, "7f434309-a4d9-48e9-9ebb-8803db794577", "123 address street", false, "admin@admin.com" });
+
+            migrationBuilder.InsertData(
+                table: "conditions",
+                columns: new[] { "ConditionId", "ConitionName" },
+                values: new object[,]
+                {
+                    { 1, "Mint" },
+                    { 2, "Near Mint" },
+                    { 3, "Played" },
+                    { 4, "Damaged" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "cards",
+                columns: new[] { "CardId", "ConditionId", "Rarity", "UserId", "manaCost", "name", "text", "type" },
+                values: new object[] { 1, 1, "Uncommon", "00000000-ffff-ffff-ffff-ffffffffffff", "{1}{U}{U}", "Academy Researchers", "When Academy Researchers enters the battlefield, you may put an Aura card from your hand onto the battlefield attached to Academy Researchers.", "Creature — Human Wizard" });
+
+            migrationBuilder.InsertData(
+                table: "decks",
+                columns: new[] { "DeckId", "DeckName", "Description", "UserId" },
+                values: new object[] { 1, "Clifs First Deck", "First test deck", "00000000-ffff-ffff-ffff-ffffffffffff" });
+
+            migrationBuilder.InsertData(
+                table: "cardDecks",
+                columns: new[] { "CardDeckId", "CardId", "DeckId" },
+                values: new object[] { 1, 1, 1 });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -191,6 +316,31 @@ namespace Magic_Capstone.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_cardDecks_CardId",
+                table: "cardDecks",
+                column: "CardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_cardDecks_DeckId",
+                table: "cardDecks",
+                column: "DeckId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_cards_ConditionId",
+                table: "cards",
+                column: "ConditionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_cards_UserId",
+                table: "cards",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_decks_UserId",
+                table: "decks",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -211,7 +361,19 @@ namespace Magic_Capstone.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "cardDecks");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "cards");
+
+            migrationBuilder.DropTable(
+                name: "decks");
+
+            migrationBuilder.DropTable(
+                name: "conditions");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

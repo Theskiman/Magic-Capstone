@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "FindName";
+}
+
+
+
+<link rel="stylesheet" href="~/css/TaskCardStyle.css">
+<h1>Find By Name</h1>
+
+<div class="cardflex">
+
+
+    @foreach (var item in Model.cards)
+    {
+        if (item.imageUrl != null)
+        {
+
+            <div>
+                <div class="card">
+                    <img class="img-responsive" src=@item.imageUrl id="magic" />
+                </div>
+            </div>
+
+        }
+    }
+</div>

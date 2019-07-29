@@ -5,15 +5,92 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Magic_Capstone.Models;
+using Magic_Capstone.Data;
+using Microsoft.AspNetCore.Identity;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace Magic_Capstone.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+
+        private readonly ApplicationDbContext _context;
+
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public HomeController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            return View();
+            _context = context;
+            _userManager = userManager;
         }
+
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
+       public async Task<IActionResult> FindType(string type)
+        {
+            ApiHelper.InitializeClient();
+            string url = $"https://api.magicthegathering.io/v1/cards?type={type}";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var card = await response.Content.ReadAsAsync<Rootobject>();
+
+                    return View(card);
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+
+        }
+        public async Task<IActionResult> FindName(string name)
+        {
+            ApiHelper.InitializeClient();
+            string url = $"https://api.magicthegathering.io/v1/cards?name={name}";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var card = await response.Content.ReadAsAsync<Rootobject>();
+
+                    return View(card);
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+
+        }
+        public async Task<IActionResult> FindColor(string color)
+        {
+            ApiHelper.InitializeClient();
+            string url = $"https://api.magicthegathering.io/v1/cards?colors={color}";
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var card = await response.Content.ReadAsAsync<Rootobject>();
+
+                    return View(card);
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+            public IActionResult Index()
+            {
+                return View();
+            }
+
+        
+
+        
 
         public IActionResult Privacy()
         {

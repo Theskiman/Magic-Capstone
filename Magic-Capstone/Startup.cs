@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Magic_Capstone.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Magic_Capstone.Models;
 
 namespace Magic_Capstone
 {
@@ -38,7 +39,7 @@ namespace Magic_Capstone
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddDefaultIdentity<ApplicationUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 

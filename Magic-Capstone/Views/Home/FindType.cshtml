@@ -1,0 +1,26 @@
+﻿@model Magic_Capstone.Models.Rootobject
+
+@{
+    ViewData["Title"] = "FindType";
+}
+    <link rel="stylesheet" href="~/css/TaskCardStyle.css">
+<h1>Find By Type</h1>
+
+
+<div class="cardflex">
+    
+
+    @foreach (var item in Model.cards)
+    {
+        if (item.imageUrl != null)
+        {
+
+            <div>
+                <div class="card">
+                    <img class="img-responsive" src=@item.imageUrl id="magic" />
+                </div>
+            </div>
+
+        }
+    }
+</div>

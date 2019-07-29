@@ -1,0 +1,10 @@
+﻿#magic {
+    width: 211px;
+    height: 322px;
+}
+
+.cardflex {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}

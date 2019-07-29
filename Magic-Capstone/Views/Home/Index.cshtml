@@ -1,8 +1,27 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿
+@{
+    ViewData["Title"] = "Index";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Magical Search!</h1>
+<form>
+    <p>
+        Search: <input type="text" name="type">
+        <input type="submit" value="Type" asp-action="FindType" />
+    </p>
+</form>
+
+<form>
+    <p>
+        Search: <input type="text" name="name">
+       <input type="submit" value="Name" asp-action="FindName" />
+    
+    </p>
+</form>
+
+<form>
+    <p>
+        Search: <input type="text" name="color">
+        <input type="submit" value="Color" asp-action="FindColor" />
+    </p>
+</form>
