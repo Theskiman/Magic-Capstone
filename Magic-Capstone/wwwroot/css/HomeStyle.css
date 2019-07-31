@@ -1,0 +1,43 @@
+﻿
+.flexClass {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: center;
+}
+
+.onTop{
+    display: flex;
+    flex-direction: column;
+}
+
+.center{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+.searchBox{
+    margin: 5px;
+
+}
+
+.searchButtons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.centerForm{
+    margin: auto;
+}
+
+#findColor{
+    margin-left: 5px;
+    margin-right: 5px;
+}

@@ -1,7 +1,9 @@
 ﻿#magic {
-    width: 211px;
-    height: 322px;
+    width: 350px;
+    height: 475px;
 }
+
+
 
 .cardflex {
     display: flex;

@@ -1,0 +1,14 @@
+﻿@model IEnumerable<Magic_Capstone.Models.CardData>
+
+@{
+    ViewData["Title"] = "CreateDeck";
+}
+
+<h1>CreateDeck</h1>
+
+
+
+@foreach (var item in Model) {
+                 <a asp-action="SaveCard" asp-controller="CardDecks"> <img class="img-responsive" src=@item.imageUrl id="magic" /></a>
+
+    }

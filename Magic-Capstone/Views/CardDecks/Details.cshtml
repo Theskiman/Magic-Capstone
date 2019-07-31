@@ -1,0 +1,30 @@
+﻿@model Magic_Capstone.Models.CardDeck
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>CardDeck</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Card)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Card.CardId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Deck)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Deck.DeckId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.CardDeckId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

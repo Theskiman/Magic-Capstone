@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Magic_Capstone.Models.CardDeck>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Card)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deck)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Card.CardId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deck.DeckId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CardDeckId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.CardDeckId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.CardDeckId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

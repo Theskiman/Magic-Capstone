@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Magic_Capstone.Controllers
 {
-    public class CardsController : Controller
+    public class CardDecksController : Controller
     {
         private readonly ApplicationDbContext _context;
 
@@ -20,22 +20,20 @@ namespace Magic_Capstone.Controllers
 
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public CardsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public CardDecksController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-     
-
-        // GET: Cards
+        // GET: CardDecks
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.cards.Include(c => c.User);
+            var applicationDbContext = _context.cardDecks.Include(c => c.Card).Include(c => c.Deck);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Cards/Details/5
+        // GET: CardDecks/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,45 +41,39 @@ namespace Magic_Capstone.Controllers
                 return NotFound();
             }
 
-            var card = await _context.cards
-              
-                .Include(c => c.User)
-                .FirstOrDefaultAsync(m => m.CardId == id);
-            if (card == null)
+            var cardDeck = await _context.cardDecks
+                .Include(c => c.Card)
+                .Include(c => c.Deck)
+                .FirstOrDefaultAsync(m => m.CardDeckId == id);
+            if (cardDeck == null)
             {
                 return NotFound();
             }
 
-            return View(card);
+            return View(cardDeck);
         }
 
-   
 
-        // POST: Cards/Create
+        // POST: CardDecks/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CardId,ConditionId,name,manaCost,type,rarity,text,imageUrl,UserId")] CardData card)
+        public async Task<IActionResult> SaveCard([Bind("CardDeckId,CardId,DeckId")] CardDeck cardDeck)
         {
             string referer = Request.Headers["Referer"].ToString();
             ViewData["UserId"] = GetCurrentUserAsync().Id;
             if (ModelState.IsValid)
             {
-                card.User = await GetCurrentUserAsync();
-               
-
-                _context.Add(card); 
+                _context.Add(cardDeck);
                 await _context.SaveChangesAsync();
-                
-                
+                return RedirectToAction(nameof(Index));
             }
+         
             return Redirect(referer);
-            
         }
-       
-
-        // GET: Cards/Edit/5
+      
+        // GET: CardDecks/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,24 +81,24 @@ namespace Magic_Capstone.Controllers
                 return NotFound();
             }
 
-            var card = await _context.cards.FindAsync(id);
-            if (card == null)
+            var cardDeck = await _context.cardDecks.FindAsync(id);
+            if (cardDeck == null)
             {
                 return NotFound();
             }
-           
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", card.UserId);
-            return View(card);
+            ViewData["CardId"] = new SelectList(_context.cards, "CardId", "CardId", cardDeck.CardId);
+            ViewData["DeckId"] = new SelectList(_context.decks, "DeckId", "DeckId", cardDeck.DeckId);
+            return View(cardDeck);
         }
 
-        // POST: Cards/Edit/5
+        // POST: CardDecks/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CardId,ConditionId,name,manaCost,type,rarity,set,setName,text,imageUrl,UserId")] Card card)
+        public async Task<IActionResult> Edit(int id, [Bind("CardDeckId,CardId,DeckId")] CardDeck cardDeck)
         {
-            if (id != card.CardId)
+            if (id != cardDeck.CardDeckId)
             {
                 return NotFound();
             }
@@ -115,12 +107,12 @@ namespace Magic_Capstone.Controllers
             {
                 try
                 {
-                    _context.Update(card);
+                    _context.Update(cardDeck);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CardExists(card.CardId))
+                    if (!CardDeckExists(cardDeck.CardDeckId))
                     {
                         return NotFound();
                     }
@@ -131,12 +123,12 @@ namespace Magic_Capstone.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", card.UserId);
-            return View(card);
+            ViewData["CardId"] = new SelectList(_context.cards, "CardId", "CardId", cardDeck.CardId);
+            ViewData["DeckId"] = new SelectList(_context.decks, "DeckId", "DeckId", cardDeck.DeckId);
+            return View(cardDeck);
         }
 
-        // GET: Cards/Delete/5
+        // GET: CardDecks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,32 +136,32 @@ namespace Magic_Capstone.Controllers
                 return NotFound();
             }
 
-            var card = await _context.cards
-               
-                .Include(c => c.User)
-                .FirstOrDefaultAsync(m => m.CardId == id);
-            if (card == null)
+            var cardDeck = await _context.cardDecks
+                .Include(c => c.Card)
+                .Include(c => c.Deck)
+                .FirstOrDefaultAsync(m => m.CardDeckId == id);
+            if (cardDeck == null)
             {
                 return NotFound();
             }
 
-            return View(card);
+            return View(cardDeck);
         }
 
-        // POST: Cards/Delete/5
+        // POST: CardDecks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var card = await _context.cards.FindAsync(id);
-            _context.cards.Remove(card);
+            var cardDeck = await _context.cardDecks.FindAsync(id);
+            _context.cardDecks.Remove(cardDeck);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CardExists(int id)
+        private bool CardDeckExists(int id)
         {
-            return _context.cards.Any(e => e.CardId == id);
+            return _context.cardDecks.Any(e => e.CardDeckId == id);
         }
     }
 }

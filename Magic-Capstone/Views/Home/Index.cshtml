@@ -3,30 +3,27 @@
     ViewData["Title"] = "Index";
 }
 
+    <link rel="stylesheet" href="~/css/HomeStyle.css">
+    <link rel="stylesheet" href="~/css/TaskCardStyle.css">
+
 <h1>Magical Search!</h1>
+    
 <div class="flexClass">
-    <form>
-        <p>
-            Search: <input type="text" name="type">
-            <input type="submit" value="Type" asp-action="FindType" />
+    <form class="centerForm">
+        <p class="onTop">
+            <input type="text" class="searchBox">
+            <div class="searchButtons">
+            <input type="submit" value="Search By Type" asp-action="FindType" class="btn btn-dark" id="findType" />
+            <input type="submit" value="Search By Color" name="color" asp-action="FindColor" class="btn btn-dark" id="findColor"/>
+            <input type="submit" value="Search By Name" asp-action="FindName" class="btn btn-dark" id="findName"/>
+            </div>
         </p>
     </form>
-
-    <form>
-        <p>
-            Search: <input type="text" name="name">
-            <input type="submit" value="Name" asp-action="FindName" />
-
-        </p>
-    </form>
-
-    <form>
-        <p>
-            Search: <input type="text" name="color">
-            <input type="submit" value="Color" asp-action="FindColor" />
-        </p>
-    </form>
+   
+   
 </div>
+<div><a href="http://localhost:5000/CreateDeck">Create New Deck</a></div>
+<div class="centerCards">
 
 <h2>Recent Cards</h2>
 
@@ -34,5 +31,5 @@
 {
 <img class="img-responsive" src=@item.imageUrl id="magic" />
 }
-
-
+    
+    </div>
