@@ -16,6 +16,7 @@ namespace Magic_Capstone.Data
             public DbSet<Deck> decks { get; set;}
             public DbSet<CardDeck> cardDecks { get; set; }
             public DbSet<Condition> conditions { get; set; }
+        public DbSet<CardData> cardDatas { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -74,10 +75,10 @@ namespace Magic_Capstone.Data
                 {
                     CardId = 1,
                     name = "Academy Researchers",
-                    ConditionId = 1,
+                    
                     text = "When Academy Researchers enters the battlefield, you may put an Aura card from your hand onto the battlefield attached to Academy Researchers.",
                     manaCost = "{1}{U}{U}",
-                    colors = new List<string>() { "Blue" },
+                    
                     type = "Creature — Human Wizard",
                     rarity = "Uncommon",
                     UserId = "00000000-ffff-ffff-ffff-ffffffffffff"

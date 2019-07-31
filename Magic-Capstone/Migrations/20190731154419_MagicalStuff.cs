@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Magic_Capstone.Migrations
 {
-    public partial class Magical : Migration
+    public partial class MagicalStuff : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -61,6 +61,18 @@ namespace Magic_Capstone.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_conditions", x => x.ConditionId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rootobject",
+                columns: table => new
+                {
+                    RootobjectId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rootobject", x => x.RootobjectId);
                 });
 
             migrationBuilder.CreateTable(
@@ -170,6 +182,31 @@ namespace Magic_Capstone.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "cardDatas",
+                columns: table => new
+                {
+                    CardDataId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    name = table.Column<string>(nullable: true),
+                    text = table.Column<string>(nullable: true),
+                    manaCost = table.Column<string>(nullable: true),
+                    type = table.Column<string>(nullable: true),
+                    rarity = table.Column<string>(nullable: true),
+                    imageUrl = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_cardDatas", x => x.CardDataId);
+                    table.ForeignKey(
+                        name: "FK_cardDatas_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "decks",
                 columns: table => new
                 {
@@ -197,22 +234,25 @@ namespace Magic_Capstone.Migrations
                     CardId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     name = table.Column<string>(nullable: true),
-                    ConditionId = table.Column<int>(nullable: false),
-                    text = table.Column<string>(nullable: true),
                     manaCost = table.Column<string>(nullable: true),
                     type = table.Column<string>(nullable: true),
-                    Rarity = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: true)
+                    rarity = table.Column<string>(nullable: true),
+                    set = table.Column<string>(nullable: true),
+                    setName = table.Column<string>(nullable: true),
+                    text = table.Column<string>(nullable: true),
+                    imageUrl = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                    RootobjectId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_cards", x => x.CardId);
                     table.ForeignKey(
-                        name: "FK_cards_conditions_ConditionId",
-                        column: x => x.ConditionId,
-                        principalTable: "conditions",
-                        principalColumn: "ConditionId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_cards_Rootobject_RootobjectId",
+                        column: x => x.RootobjectId,
+                        principalTable: "Rootobject",
+                        principalColumn: "RootobjectId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_cards_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -250,7 +290,7 @@ namespace Magic_Capstone.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "StreetAddress", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "00000000-ffff-ffff-ffff-ffffffffffff", 0, "0cea28a3-c3d8-411e-b9db-0668ceb779fe", "admin@admin.com", true, "Clifton", "Matuszewski", false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEEPBikpeUv8fovO4FXzu2V/rOMLQuDX7VWNV+VOt4475vWlYEL8HNSf3lGZhcsx/QQ==", null, false, "7f434309-a4d9-48e9-9ebb-8803db794577", "123 address street", false, "admin@admin.com" });
+                values: new object[] { "00000000-ffff-ffff-ffff-ffffffffffff", 0, "745028c0-5ba5-41d0-b7c1-c57119eb09d6", "admin@admin.com", true, "Clifton", "Matuszewski", false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAENks36TNg7Xzi0eEqWmPI2xnQC1jM6gDM9aJB/0TJgBNRFQljYYJciLIwx1LNr6TtA==", null, false, "7f434309-a4d9-48e9-9ebb-8803db794577", "123 address street", false, "admin@admin.com" });
 
             migrationBuilder.InsertData(
                 table: "conditions",
@@ -265,8 +305,8 @@ namespace Magic_Capstone.Migrations
 
             migrationBuilder.InsertData(
                 table: "cards",
-                columns: new[] { "CardId", "ConditionId", "Rarity", "UserId", "manaCost", "name", "text", "type" },
-                values: new object[] { 1, 1, "Uncommon", "00000000-ffff-ffff-ffff-ffffffffffff", "{1}{U}{U}", "Academy Researchers", "When Academy Researchers enters the battlefield, you may put an Aura card from your hand onto the battlefield attached to Academy Researchers.", "Creature — Human Wizard" });
+                columns: new[] { "CardId", "RootobjectId", "UserId", "imageUrl", "manaCost", "name", "rarity", "set", "setName", "text", "type" },
+                values: new object[] { 1, null, "00000000-ffff-ffff-ffff-ffffffffffff", null, "{1}{U}{U}", "Academy Researchers", "Uncommon", null, null, "When Academy Researchers enters the battlefield, you may put an Aura card from your hand onto the battlefield attached to Academy Researchers.", "Creature — Human Wizard" });
 
             migrationBuilder.InsertData(
                 table: "decks",
@@ -318,6 +358,11 @@ namespace Magic_Capstone.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_cardDatas_UserId",
+                table: "cardDatas",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_cardDecks_CardId",
                 table: "cardDecks",
                 column: "CardId");
@@ -328,9 +373,9 @@ namespace Magic_Capstone.Migrations
                 column: "DeckId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_cards_ConditionId",
+                name: "IX_cards_RootobjectId",
                 table: "cards",
-                column: "ConditionId");
+                column: "RootobjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_cards_UserId",
@@ -361,7 +406,13 @@ namespace Magic_Capstone.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "cardDatas");
+
+            migrationBuilder.DropTable(
                 name: "cardDecks");
+
+            migrationBuilder.DropTable(
+                name: "conditions");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -373,7 +424,7 @@ namespace Magic_Capstone.Migrations
                 name: "decks");
 
             migrationBuilder.DropTable(
-                name: "conditions");
+                name: "Rootobject");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

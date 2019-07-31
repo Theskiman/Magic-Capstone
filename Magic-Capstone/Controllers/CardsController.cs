@@ -14,7 +14,9 @@ namespace Magic_Capstone.Controllers
     public class CardsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        
+
+        private Task<ApplicationUser> GetCurrentUserAsync() =>
+            _userManager.GetUserAsync(HttpContext.User);
 
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -24,16 +26,12 @@ namespace Magic_Capstone.Controllers
             _userManager = userManager;
         }
 
-        public CardsController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
+     
 
         // GET: Cards
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.cards.Include(c => c.Condition).Include(c => c.User);
+            var applicationDbContext = _context.cards.Include(c => c.User);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -46,7 +44,7 @@ namespace Magic_Capstone.Controllers
             }
 
             var card = await _context.cards
-                .Include(c => c.Condition)
+              
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.CardId == id);
             if (card == null)
@@ -57,31 +55,29 @@ namespace Magic_Capstone.Controllers
             return View(card);
         }
 
-        // GET: Cards/Create
-        public IActionResult Create()
-        {
-            ViewData["ConditionId"] = new SelectList(_context.conditions, "ConditionId", "ConditionId");
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
-            return View();
-        }
+   
 
         // POST: Cards/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CardId,ConditionId,name,manaCost,type,rarity,set,setName,text,imageUrl,UserId")] Card card)
+        public async Task<IActionResult> Create([Bind("CardId,ConditionId,name,manaCost,type,rarity,text,imageUrl,UserId")] CardData card)
         {
+            ViewData["UserId"] = GetCurrentUserAsync().Id;
             if (ModelState.IsValid)
             {
+                card.User = await GetCurrentUserAsync();
+               
+
                 _context.Add(card);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                
             }
-            ViewData["ConditionId"] = new SelectList(_context.conditions, "ConditionId", "ConditionId", card.ConditionId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", card.UserId);
-            return View(card);
+         
+            return RedirectToAction("Index", "Home");
         }
+       
 
         // GET: Cards/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -96,7 +92,7 @@ namespace Magic_Capstone.Controllers
             {
                 return NotFound();
             }
-            ViewData["ConditionId"] = new SelectList(_context.conditions, "ConditionId", "ConditionId", card.ConditionId);
+           
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", card.UserId);
             return View(card);
         }
@@ -133,7 +129,7 @@ namespace Magic_Capstone.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ConditionId"] = new SelectList(_context.conditions, "ConditionId", "ConditionId", card.ConditionId);
+            
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", card.UserId);
             return View(card);
         }
@@ -147,7 +143,7 @@ namespace Magic_Capstone.Controllers
             }
 
             var card = await _context.cards
-                .Include(c => c.Condition)
+               
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.CardId == id);
             if (card == null)

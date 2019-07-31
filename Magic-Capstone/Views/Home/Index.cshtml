@@ -1,27 +1,38 @@
-﻿
+﻿@model IEnumerable<Magic_Capstone.Models.CardData>
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Magical Search!</h1>
-<form>
-    <p>
-        Search: <input type="text" name="type">
-        <input type="submit" value="Type" asp-action="FindType" />
-    </p>
-</form>
+<div class="flexClass">
+    <form>
+        <p>
+            Search: <input type="text" name="type">
+            <input type="submit" value="Type" asp-action="FindType" />
+        </p>
+    </form>
 
-<form>
-    <p>
-        Search: <input type="text" name="name">
-       <input type="submit" value="Name" asp-action="FindName" />
-    
-    </p>
-</form>
+    <form>
+        <p>
+            Search: <input type="text" name="name">
+            <input type="submit" value="Name" asp-action="FindName" />
 
-<form>
-    <p>
-        Search: <input type="text" name="color">
-        <input type="submit" value="Color" asp-action="FindColor" />
-    </p>
-</form>
+        </p>
+    </form>
+
+    <form>
+        <p>
+            Search: <input type="text" name="color">
+            <input type="submit" value="Color" asp-action="FindColor" />
+        </p>
+    </form>
+</div>
+
+<h2>Recent Cards</h2>
+
+@foreach(var item in Model)
+{
+<img class="img-responsive" src=@item.imageUrl id="magic" />
+}
+
+

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Magic_Capstone.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190726190327_Magical")]
-    partial class Magical
+    [Migration("20190731154419_MagicalStuff")]
+    partial class MagicalStuff
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -85,7 +85,7 @@ namespace Magic_Capstone.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0cea28a3-c3d8-411e-b9db-0668ceb779fe",
+                            ConcurrencyStamp = "745028c0-5ba5-41d0-b7c1-c57119eb09d6",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Clifton",
@@ -93,7 +93,7 @@ namespace Magic_Capstone.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEPBikpeUv8fovO4FXzu2V/rOMLQuDX7VWNV+VOt4475vWlYEL8HNSf3lGZhcsx/QQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENks36TNg7Xzi0eEqWmPI2xnQC1jM6gDM9aJB/0TJgBNRFQljYYJciLIwx1LNr6TtA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             StreetAddress = "123 address street",
@@ -108,15 +108,21 @@ namespace Magic_Capstone.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ConditionId");
-
-                    b.Property<string>("Rarity");
+                    b.Property<int?>("RootobjectId");
 
                     b.Property<string>("UserId");
+
+                    b.Property<string>("imageUrl");
 
                     b.Property<string>("manaCost");
 
                     b.Property<string>("name");
+
+                    b.Property<string>("rarity");
+
+                    b.Property<string>("set");
+
+                    b.Property<string>("setName");
 
                     b.Property<string>("text");
 
@@ -124,7 +130,7 @@ namespace Magic_Capstone.Migrations
 
                     b.HasKey("CardId");
 
-                    b.HasIndex("ConditionId");
+                    b.HasIndex("RootobjectId");
 
                     b.HasIndex("UserId");
 
@@ -134,14 +140,40 @@ namespace Magic_Capstone.Migrations
                         new
                         {
                             CardId = 1,
-                            ConditionId = 1,
-                            Rarity = "Uncommon",
                             UserId = "00000000-ffff-ffff-ffff-ffffffffffff",
                             manaCost = "{1}{U}{U}",
                             name = "Academy Researchers",
+                            rarity = "Uncommon",
                             text = "When Academy Researchers enters the battlefield, you may put an Aura card from your hand onto the battlefield attached to Academy Researchers.",
                             type = "Creature — Human Wizard"
                         });
+                });
+
+            modelBuilder.Entity("Magic_Capstone.Models.CardData", b =>
+                {
+                    b.Property<int>("CardDataId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("imageUrl");
+
+                    b.Property<string>("manaCost");
+
+                    b.Property<string>("name");
+
+                    b.Property<string>("rarity");
+
+                    b.Property<string>("text");
+
+                    b.Property<string>("type");
+
+                    b.HasKey("CardDataId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("cardDatas");
                 });
 
             modelBuilder.Entity("Magic_Capstone.Models.CardDeck", b =>
@@ -232,6 +264,17 @@ namespace Magic_Capstone.Migrations
                             Description = "First test deck",
                             UserId = "00000000-ffff-ffff-ffff-ffffffffffff"
                         });
+                });
+
+            modelBuilder.Entity("Magic_Capstone.Models.Rootobject", b =>
+                {
+                    b.Property<int>("RootobjectId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.HasKey("RootobjectId");
+
+                    b.ToTable("Rootobject");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -350,13 +393,19 @@ namespace Magic_Capstone.Migrations
 
             modelBuilder.Entity("Magic_Capstone.Models.Card", b =>
                 {
-                    b.HasOne("Magic_Capstone.Models.Condition", "Condition")
-                        .WithMany()
-                        .HasForeignKey("ConditionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("Magic_Capstone.Models.Rootobject")
+                        .WithMany("cards")
+                        .HasForeignKey("RootobjectId");
 
                     b.HasOne("Magic_Capstone.Models.ApplicationUser", "User")
                         .WithMany("Products")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Magic_Capstone.Models.CardData", b =>
+                {
+                    b.HasOne("Magic_Capstone.Models.ApplicationUser", "User")
+                        .WithMany()
                         .HasForeignKey("UserId");
                 });
 

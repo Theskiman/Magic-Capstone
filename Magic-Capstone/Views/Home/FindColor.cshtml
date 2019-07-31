@@ -1,4 +1,6 @@
-﻿
+﻿@model Magic_Capstone.Models.Rootobject
+
+
 @{
     ViewData["Title"] = "FindColor";
 }
@@ -7,20 +9,32 @@
 
 <h1>Find By Color</h1>
 
-<div class="cardflex">
 
 
-    @foreach (var item in Model.cards)
+
+@foreach (var item in Model.cards)
+{
+    if (item.imageUrl != null)
     {
-        if (item.imageUrl != null)
-        {
+        <form asp-action="Create" asp-controller="Cards">
 
-            <div>
-                <div class="card">
-                    <img class="img-responsive" src=@item.imageUrl id="magic" />
+            <input type="checkbox" value="Save Card" /> 
+            <img class="img-responsive" src=@item.imageUrl id="magic" />
+
+            <div class="cardInfo">
+                @Html.Hidden("name", item.name)
+                @Html.Hidden("type", item.type)
+                @Html.Hidden("text", item.text)
+                @Html.Hidden("colors", item.colors)
+                @Html.Hidden("manaCost", item.manaCost)
+                @Html.Hidden("imageUrl", item.imageUrl)
+                @Html.Hidden("rarity", item.rarity)
+                <div class="form-group">
+                    <input type="submit" value="Save Card" class="btn btn-primary"  />
                 </div>
             </div>
+        </form>
 
-        }
     }
-</div>
+
+}

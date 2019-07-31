@@ -1,4 +1,4 @@
-﻿
+﻿@model Magic_Capstone.Models.Rootobject
 @{
     ViewData["Title"] = "FindName";
 }
@@ -16,11 +16,24 @@
         if (item.imageUrl != null)
         {
 
-            <div>
-                <div class="card">
-                    <img class="img-responsive" src=@item.imageUrl id="magic" />
+            <form asp-action="Create" asp-controller="Cards">
+
+
+                <img class="img-responsive" src=@item.imageUrl id="magic" />
+
+                <div class="cardInfo">
+                    @Html.Hidden("name", item.name)
+                    @Html.Hidden("type", item.type)
+                    @Html.Hidden("text", item.text)
+                    @Html.Hidden("colors", item.colors)
+                    @Html.Hidden("manaCost", item.manaCost)
+                    @Html.Hidden("imageUrl", item.imageUrl)
+                    @Html.Hidden("rarity", item.rarity)
+                    <div class="form-group">
+                        <input type="submit" value="Save Card" class="btn btn-primary" />
+                    </div>
                 </div>
-            </div>
+            </form>
 
         }
     }

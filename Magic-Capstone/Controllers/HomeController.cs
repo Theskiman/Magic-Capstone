@@ -9,6 +9,7 @@ using Magic_Capstone.Data;
 using Microsoft.AspNetCore.Identity;
 using System.Net.Http;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace Magic_Capstone.Controllers
 {
@@ -55,7 +56,7 @@ namespace Magic_Capstone.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var card = await response.Content.ReadAsAsync<Rootobject>();
-
+              
                     return View(card);
                 }
                 else
@@ -83,14 +84,17 @@ namespace Magic_Capstone.Controllers
                 }
             }
         }
-            public IActionResult Index()
-            {
-                return View();
-            }
+        public async Task<IActionResult> Index()
+        {
+            var applicationDbContext = _context.cardDatas.Take(20);
+            return View(await applicationDbContext.ToListAsync());
+        }
 
-        
 
-        
+
+
+
+
 
         public IActionResult Privacy()
         {
