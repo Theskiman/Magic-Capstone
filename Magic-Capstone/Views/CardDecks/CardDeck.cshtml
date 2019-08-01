@@ -8,14 +8,24 @@
 
 <link rel="stylesheet" href="~/css/TaskCardStyle.css">
 
-<form>
+ 
+<form asp-action="SaveCard" asp-controller="CardDecks">
+
 <div class="form-group">
     <label asp-for="Deck.DeckId" class="control-label"></label>
     <select asp-for="Deck.DeckId" class="form-control" asp-items="@Model.DeckOptions"></select>
 </div>
-    </form>
 @foreach (var item in Model.cardDatas)
 {
-    <input type="image" src=@item.imageUrl id="magic" />
+    <div class="cardInfo">
+       
+      
+        <div class="form-group">
+
+            
+            <button type="submit" name="CardDataId" value="@item.CardDataId"><img src="@item.imageUrl" id="magic"></button>
+        </div>
+        </div>
 }
+</form>
 

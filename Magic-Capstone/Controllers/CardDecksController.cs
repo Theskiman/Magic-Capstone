@@ -46,13 +46,12 @@ namespace Magic_Capstone.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveCard([Bind("CardDeckId,CardId,DeckId")] CardDeck cardDeck)
+        public async Task<IActionResult> SaveCard(CardDeck cardDeck)
         {
             string referer = Request.Headers["Referer"].ToString();
             ViewData["UserId"] = GetCurrentUserAsync().Id;
             if (ModelState.IsValid)
             {
-                
                 
                 _context.Add(cardDeck);
                 
