@@ -52,7 +52,10 @@ namespace Magic_Capstone.Controllers
             ViewData["UserId"] = GetCurrentUserAsync().Id;
             if (ModelState.IsValid)
             {
-                
+                cardDeck.Deck = null;
+                cardDeck.CardData = null;
+                cardDeck.DeckId = cardDeck.Deck.DeckId;
+
                 _context.Add(cardDeck);
                 
                 await _context.SaveChangesAsync();
