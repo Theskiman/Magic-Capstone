@@ -8,8 +8,8 @@ namespace Magic_Capstone.Models
     public class CardDeck
     {
         public int CardDeckId { get; set; }
-        public int CardId { get; set; }
-        public Card Card { get; set; }
+        public int CardDataId { get; set; }
+        public Card CardData { get; set; }
         public int DeckId { get; set; }
         public Deck Deck { get; set; }
     }

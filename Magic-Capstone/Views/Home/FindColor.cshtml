@@ -19,7 +19,7 @@
             <form asp-action="Create" asp-controller="Cards">
 
 
-                <img class="img-responsive" src=@item.imageUrl id="magic" />
+                
 
                 <div class="cardInfo">
                     @Html.Hidden("name", item.name)
@@ -30,11 +30,11 @@
                     @Html.Hidden("imageUrl", item.imageUrl)
                     @Html.Hidden("rarity", item.rarity)
                     <div class="form-group">
-                        <input type="submit" value="Save Card" class="btn btn-primary" />
+                        <input type="image" src=@item.imageUrl id="magic"/>
                     </div>
                 </div>
             </form>
         }
     }
-    <a asp-action="Index">Back to HomePage</a>
 </div>
+<a asp-action="Index" class="btn btn-dark">Back to HomePage</a>

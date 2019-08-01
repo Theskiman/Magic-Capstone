@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Magic_Capstone.Data;
 using Magic_Capstone.Models;
 using Microsoft.AspNetCore.Identity;
+using Magic_Capstone.Models.DeckViewModels;
 
 namespace Magic_Capstone.Controllers
 {
@@ -26,15 +27,45 @@ namespace Magic_Capstone.Controllers
             _userManager = userManager;
         }
 
-        // GET: CardDecks
-        public async Task<IActionResult> Index()
+        // GET: CardDecks all cardDatas to display and save cards to a new deck
+   
+        public async Task<IActionResult> CardDeck()
         {
-            var applicationDbContext = _context.cardDecks.Include(c => c.Card).Include(c => c.Deck);
-            return View(await applicationDbContext.ToListAsync());
+            var viewModel = new CardDeckViewModel
+            {
+                AvailableDecks = await _context.decks.ToListAsync(),
+
+            };
+            viewModel.AvailableDecks = GetAllDecks();
+            viewModel.cardDatas = _context.cardDatas.ToList();
+            
+            return View(viewModel);
         }
+        // POST: CardDecks/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveCard([Bind("CardDeckId,CardId,DeckId")] CardDeck cardDeck)
+        {
+            string referer = Request.Headers["Referer"].ToString();
+            ViewData["UserId"] = GetCurrentUserAsync().Id;
+            if (ModelState.IsValid)
+            {
+                
+                
+                _context.Add(cardDeck);
+                
+                await _context.SaveChangesAsync();
+                
+            }
+            
+            return Redirect(referer);
+        }
+      
 
         // GET: CardDecks/Details/5
-        public async Task<IActionResult> Details(int? id)
+      /*  public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -51,28 +82,9 @@ namespace Magic_Capstone.Controllers
             }
 
             return View(cardDeck);
-        }
+        }*/
 
 
-        // POST: CardDecks/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveCard([Bind("CardDeckId,CardId,DeckId")] CardDeck cardDeck)
-        {
-            string referer = Request.Headers["Referer"].ToString();
-            ViewData["UserId"] = GetCurrentUserAsync().Id;
-            if (ModelState.IsValid)
-            {
-                _context.Add(cardDeck);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-         
-            return Redirect(referer);
-        }
-      
         // GET: CardDecks/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -86,7 +98,7 @@ namespace Magic_Capstone.Controllers
             {
                 return NotFound();
             }
-            ViewData["CardId"] = new SelectList(_context.cards, "CardId", "CardId", cardDeck.CardId);
+            ViewData["CardId"] = new SelectList(_context.cards, "CardId", "CardId", cardDeck.CardDataId);
             ViewData["DeckId"] = new SelectList(_context.decks, "DeckId", "DeckId", cardDeck.DeckId);
             return View(cardDeck);
         }
@@ -94,39 +106,7 @@ namespace Magic_Capstone.Controllers
         // POST: CardDecks/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CardDeckId,CardId,DeckId")] CardDeck cardDeck)
-        {
-            if (id != cardDeck.CardDeckId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(cardDeck);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CardDeckExists(cardDeck.CardDeckId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CardId"] = new SelectList(_context.cards, "CardId", "CardId", cardDeck.CardId);
-            ViewData["DeckId"] = new SelectList(_context.decks, "DeckId", "DeckId", cardDeck.DeckId);
-            return View(cardDeck);
-        }
+     
 
         // GET: CardDecks/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -137,7 +117,7 @@ namespace Magic_Capstone.Controllers
             }
 
             var cardDeck = await _context.cardDecks
-                .Include(c => c.Card)
+                .Include(c => c.CardData)
                 .Include(c => c.Deck)
                 .FirstOrDefaultAsync(m => m.CardDeckId == id);
             if (cardDeck == null)
@@ -156,9 +136,13 @@ namespace Magic_Capstone.Controllers
             var cardDeck = await _context.cardDecks.FindAsync(id);
             _context.cardDecks.Remove(cardDeck);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Home");
         }
-
+        public  List<Deck> GetAllDecks()
+        {
+            List<Deck> decks =  _context.decks.ToList();
+            return decks;
+        }
         private bool CardDeckExists(int id)
         {
             return _context.cardDecks.Any(e => e.CardDeckId == id);

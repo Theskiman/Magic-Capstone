@@ -99,7 +99,7 @@ namespace Magic_Capstone.Data
                 new CardDeck()
                 {
                     CardDeckId = 1,
-                    CardId = 1,
+                    CardDataId = 1,
                     DeckId = 1
                 });
         }

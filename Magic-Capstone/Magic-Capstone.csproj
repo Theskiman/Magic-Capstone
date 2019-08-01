@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\CardDecks\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\css\TaskCardStyle.css" />
   </ItemGroup>
 

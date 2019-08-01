@@ -1,0 +1,21 @@
+﻿@model Magic_Capstone.Models.DeckViewModels.CardDeckViewModel
+
+@{
+    ViewData["Title"] = "CardDeck";
+}
+
+<h1>Save Cards To Your Deck</h1>
+
+<link rel="stylesheet" href="~/css/TaskCardStyle.css">
+
+<form>
+<div class="form-group">
+    <label asp-for="Deck.DeckId" class="control-label"></label>
+    <select asp-for="Deck.DeckId" class="form-control" asp-items="@Model.DeckOptions"></select>
+</div>
+    </form>
+@foreach (var item in Model.cardDatas)
+{
+    <input type="image" src=@item.imageUrl id="magic" />
+}
+
