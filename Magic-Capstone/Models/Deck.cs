@@ -13,8 +13,10 @@ namespace Magic_Capstone.Models
         public string DeckName { get; set; }
         public string Description { get; set; }
         [NotMapped]
-        public List<CardDeck> cardDecks { get; set; }
+        public ICollection<CardDeck> cardDecks { get; set; }
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
+        [NotMapped]
+        public ICollection<CardData> cardDatas { get; set; }
     }
 }

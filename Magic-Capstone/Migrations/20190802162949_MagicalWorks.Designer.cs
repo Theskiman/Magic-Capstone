@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Magic_Capstone.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190731154419_MagicalStuff")]
-    partial class MagicalStuff
+    [Migration("20190802162949_MagicalWorks")]
+    partial class MagicalWorks
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -85,7 +85,7 @@ namespace Magic_Capstone.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "745028c0-5ba5-41d0-b7c1-c57119eb09d6",
+                            ConcurrencyStamp = "9a5d0a76-fae7-4878-8e13-9cad7e133cf7",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Clifton",
@@ -93,7 +93,7 @@ namespace Magic_Capstone.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAENks36TNg7Xzi0eEqWmPI2xnQC1jM6gDM9aJB/0TJgBNRFQljYYJciLIwx1LNr6TtA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEA6hA0WiLXvJsROyfCQ8j29vGKllDZf0Mz1yKhbT51+7UISNmgGk5aIUCXXg//zZkg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             StreetAddress = "123 address street",
@@ -182,25 +182,17 @@ namespace Magic_Capstone.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CardId");
+                    b.Property<int>("CardDataId");
 
                     b.Property<int>("DeckId");
 
                     b.HasKey("CardDeckId");
 
-                    b.HasIndex("CardId");
+                    b.HasIndex("CardDataId");
 
                     b.HasIndex("DeckId");
 
                     b.ToTable("cardDecks");
-
-                    b.HasData(
-                        new
-                        {
-                            CardDeckId = 1,
-                            CardId = 1,
-                            DeckId = 1
-                        });
                 });
 
             modelBuilder.Entity("Magic_Capstone.Models.Condition", b =>
@@ -411,9 +403,9 @@ namespace Magic_Capstone.Migrations
 
             modelBuilder.Entity("Magic_Capstone.Models.CardDeck", b =>
                 {
-                    b.HasOne("Magic_Capstone.Models.Card", "Card")
+                    b.HasOne("Magic_Capstone.Models.CardData", "CardData")
                         .WithMany()
-                        .HasForeignKey("CardId")
+                        .HasForeignKey("CardDataId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Magic_Capstone.Models.Deck", "Deck")

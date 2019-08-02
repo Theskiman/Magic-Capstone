@@ -95,13 +95,7 @@ namespace Magic_Capstone.Data
                     UserId = "00000000-ffff-ffff-ffff-ffffffffffff"
                 });
 
-            modelBuilder.Entity<CardDeck>().HasData(
-                new CardDeck()
-                {
-                    CardDeckId = 1,
-                    CardDataId = 1,
-                    DeckId = 1
-                });
+            
         }
         public DbSet<Magic_Capstone.Models.Rootobject> Rootobject { get; set; }
         

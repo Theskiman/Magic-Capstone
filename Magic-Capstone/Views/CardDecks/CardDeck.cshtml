@@ -12,9 +12,10 @@
 <form asp-action="SaveCard" asp-controller="CardDecks">
 
 <div class="form-group">
-    <label asp-for="Deck.DeckId" class="control-label"></label>
+    <label asp-for="Deck.DeckId" class="control-label">Deck Name</label>
     <select asp-for="Deck.DeckId" class="form-control" asp-items="@Model.DeckOptions"></select>
 </div>
+            <div class="cardflex">
 @foreach (var item in Model.cardDatas)
 {
     <div class="cardInfo">
@@ -22,10 +23,10 @@
       
         <div class="form-group">
 
-            
             <button type="submit" name="CardDataId" value="@item.CardDataId"><img src="@item.imageUrl" id="magic"></button>
         </div>
         </div>
 }
+                </div>
 </form>
 

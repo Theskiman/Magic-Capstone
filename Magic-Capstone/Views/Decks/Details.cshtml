@@ -9,26 +9,12 @@
 <div>
     <h4>Deck</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DeckName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DeckName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.Id)
-        </dd>
-    </dl>
+    <h2>@Model.DeckName</h2>
+       @foreach(var item in Model.cardDecks)
+       {
+           <img src="@item.CardData.imageUrl" />
+       }
+    <p>@Model.Description</p>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.DeckId">Edit</a> |
