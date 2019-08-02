@@ -25,7 +25,9 @@ namespace Magic_Capstone.Controllers
         {
 
 
-            var applicationDbContext = _context.decks.Include(d => d.User);
+            var applicationDbContext = _context.decks.Include(d => d.User)
+               
+                ;
           
                 
             return View(await applicationDbContext.ToListAsync());
@@ -41,9 +43,11 @@ namespace Magic_Capstone.Controllers
 
             var deck = await _context.decks           
                 .Include(c => c.User)
-                .Include(cd => cd.cardDecks)
+                .Include(c => c.cardDecks)
+                .ThenInclude(cd => cd.CardData)
+                .Where(c => c.DeckId == id)
                 .FirstOrDefaultAsync(m => m.DeckId == id);
-
+            
             var cards = _context.cardDatas.ToList();
             
             foreach (CardDeck item in _context.cardDecks)
@@ -54,7 +58,7 @@ namespace Magic_Capstone.Controllers
                 }
                 
             }
-            
+                        
             if (deck == null)
             {
                 return NotFound();

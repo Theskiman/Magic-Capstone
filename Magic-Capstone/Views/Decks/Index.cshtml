@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+    <link rel="stylesheet" href="~/css/TaskCardStyle.css">
 <h1>Index</h1>
 
 <p>
@@ -12,9 +12,12 @@
 
 @foreach (var item in Model)
 {
+    <div>
     <h2>@item.DeckName</h2>
-    
+  
+
     <p>@item.Description</p>
     <a asp-action="Details" asp-route-id="@item.DeckId">Deck Details</a>
+        </div>
 }
-             
+          

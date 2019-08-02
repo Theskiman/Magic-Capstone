@@ -4,19 +4,22 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>@Model.DeckName Details</h1>
 
 <div>
-    <h4>Deck</h4>
+    <h4>To delete a card from your deck just click on the card you wish to delete!</h4>
     <hr />
     <h2>@Model.DeckName</h2>
        @foreach(var item in Model.cardDecks)
        {
-           <img src="@item.CardData.imageUrl" />
+           <form asp-action="Delete" asp-controller="CardDecks">
+
+          <button type="submit" name="CardDeckId" value="@item.CardDeckId"><img src="@item.CardData.imageUrl" /></button>
+               </form> 
        }
     <p>@Model.Description</p>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.DeckId">Edit</a> |
+   
     <a asp-action="Index">Back to List</a>
 </div>
