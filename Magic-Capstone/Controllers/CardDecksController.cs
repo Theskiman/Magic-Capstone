@@ -133,12 +133,13 @@ namespace Magic_Capstone.Controllers
         // POST: CardDecks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int CardDeckid)
         {
-            var cardDeck = await _context.cardDecks.FindAsync(id);
+            string referer = Request.Headers["Referer"].ToString();
+            var cardDeck = await _context.cardDecks.FindAsync(CardDeckid);
             _context.cardDecks.Remove(cardDeck);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Home");
+            return Redirect(referer);
         }
         public  List<Deck> GetAllDecks()
         {
