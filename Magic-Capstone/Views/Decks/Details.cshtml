@@ -3,13 +3,14 @@
 @{
     ViewData["Title"] = "Details";
 }
-
+    <link rel="stylesheet" href="~/css/TaskCardStyle.css">
 <h1>@Model.DeckName Details</h1>
 
 <div>
     <h4>To delete a card from your deck just click on the card you wish to delete!</h4>
     <hr />
-    <h2>@Model.DeckName</h2>
+    <h2>@Model.Description</h2>
+    <div class="cardflex">
        @foreach(var item in Model.cardDecks)
        {
            <form asp-action="Delete" asp-controller="CardDecks">
@@ -17,9 +18,10 @@
           <button type="submit" name="CardDeckId" value="@item.CardDeckId"><img src="@item.CardData.imageUrl" /></button>
                </form> 
        }
-    <p>@Model.Description</p>
+        </div>
+    
 </div>
 <div>
    
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-dark">Back to List</a>
 </div>

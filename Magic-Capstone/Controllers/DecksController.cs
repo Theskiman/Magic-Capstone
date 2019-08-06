@@ -9,9 +9,11 @@ using Magic_Capstone.Data;
 using Magic_Capstone.Models;
 using Magic_Capstone.Models.DeckViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Magic_Capstone.Controllers
 {
+    [Authorize]
     public class DecksController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -28,6 +30,7 @@ namespace Magic_Capstone.Controllers
         }
 
         // GET: Decks
+        
         public async Task<IActionResult> Index()
         {
             var user = await GetCurrentUserAsync();
@@ -43,6 +46,7 @@ namespace Magic_Capstone.Controllers
         }
 
         // GET: Cards/Details/5
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -78,6 +82,7 @@ namespace Magic_Capstone.Controllers
 
 
         // GET: Decks/Create
+        
         public IActionResult Create()
         {
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
@@ -87,6 +92,7 @@ namespace Magic_Capstone.Controllers
         // POST: Decks/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DeckName,Description")] Deck deck)
@@ -104,6 +110,7 @@ namespace Magic_Capstone.Controllers
         }
 
         // GET: Decks/Edit/5
+        
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -116,17 +123,22 @@ namespace Magic_Capstone.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", deck.UserId);
+            
+           
             return View(deck);
         }
 
         // POST: Decks/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("DeckId,DeckName,Description,UserId")] Deck deck)
         {
+            var currentUser = await GetCurrentUserAsync();
+           
+            
             if (id != deck.DeckId)
             {
                 return NotFound();
@@ -136,6 +148,7 @@ namespace Magic_Capstone.Controllers
             {
                 try
                 {
+                    
                     _context.Update(deck);
                     await _context.SaveChangesAsync();
                 }
@@ -157,6 +170,7 @@ namespace Magic_Capstone.Controllers
         }
 
         // GET: Decks/Delete/5
+      
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -180,6 +194,7 @@ namespace Magic_Capstone.Controllers
         }
 
         // POST: Decks/Delete/5
+       
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
