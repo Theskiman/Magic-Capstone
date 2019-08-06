@@ -46,13 +46,15 @@ namespace Magic_Capstone.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveCard([Bind("CardDeckId,CardId,DeckId")] CardDeck cardDeck)
+        public async Task<IActionResult> SaveCard(CardDeck cardDeck)
         {
             string referer = Request.Headers["Referer"].ToString();
             ViewData["UserId"] = GetCurrentUserAsync().Id;
             if (ModelState.IsValid)
             {
-                
+                cardDeck.DeckId = cardDeck.Deck.DeckId;
+                cardDeck.Deck = null;
+                cardDeck.CardData = null;
                 
                 _context.Add(cardDeck);
                 
@@ -131,12 +133,13 @@ namespace Magic_Capstone.Controllers
         // POST: CardDecks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int CardDeckid)
         {
-            var cardDeck = await _context.cardDecks.FindAsync(id);
+            string referer = Request.Headers["Referer"].ToString();
+            var cardDeck = await _context.cardDecks.FindAsync(CardDeckid);
             _context.cardDecks.Remove(cardDeck);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Home");
+            return Redirect(referer);
         }
         public  List<Deck> GetAllDecks()
         {

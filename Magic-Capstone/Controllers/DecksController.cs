@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Magic_Capstone.Data;
 using Magic_Capstone.Models;
+using Magic_Capstone.Models.DeckViewModels;
 
 namespace Magic_Capstone.Controllers
 {
@@ -22,11 +23,17 @@ namespace Magic_Capstone.Controllers
         // GET: Decks
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.decks.Include(d => d.User);
+
+
+            var applicationDbContext = _context.decks.Include(d => d.User)
+               
+                ;
+          
+                
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Decks/Details/5
+        // GET: Cards/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,16 +41,32 @@ namespace Magic_Capstone.Controllers
                 return NotFound();
             }
 
-            var deck = await _context.decks
-                .Include(d => d.User)
+            var deck = await _context.decks           
+                .Include(c => c.User)
+                .Include(c => c.cardDecks)
+                .ThenInclude(cd => cd.CardData)
+                .Where(c => c.DeckId == id)
                 .FirstOrDefaultAsync(m => m.DeckId == id);
+            
+            var cards = _context.cardDatas.ToList();
+            
+            foreach (CardDeck item in _context.cardDecks)
+            {
+                if (item.DeckId == deck.DeckId)
+                {
+                    deck.cardDecks.Add(item);
+                }
+                
+            }
+                        
             if (deck == null)
             {
                 return NotFound();
             }
-
+            
             return View(deck);
         }
+
 
         // GET: Decks/Create
         public IActionResult Create()
@@ -152,6 +175,17 @@ namespace Magic_Capstone.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public Deck DecksCards(Deck deck)
+        {
+            foreach (CardDeck item in _context.cardDecks)
+            {
+                if (item.DeckId == deck.DeckId)
+                {
+                    deck.cardDecks.Add(item);
+                }
+            }
+            return (deck);
+        }
         private bool DeckExists(int id)
         {
             return _context.decks.Any(e => e.DeckId == id);
