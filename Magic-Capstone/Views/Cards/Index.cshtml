@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Magic_Capstone.Models.CardData>
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<link rel="stylesheet" href="~/css/TaskCardStyle.css">
+
+<h1>Your Cards!</h1>
+
+<h4>To delete a card from your card list just click on the card you wish to delete!</h4>
+<div class="cardflex">
+
+    @foreach (var item in Model)
+    {
+        
+        
+            <form asp-action="Delete" asp-controller="Cards">
+
+                <button type="submit" name="CardDataId" value="@item.CardDataId"><img src="@item.imageUrl" /></button>
+            </form>
+        
+    }
+</div>
+<a asp-action="Index" asp-controller="Home" class="btn btn-dark">Back to HomePage</a>

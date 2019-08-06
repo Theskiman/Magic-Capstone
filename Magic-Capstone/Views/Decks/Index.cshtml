@@ -17,7 +17,9 @@
   
 
     <p>@item.Description</p>
-    <a asp-action="Details" asp-route-id="@item.DeckId">Deck Details</a>
+    <a asp-action="Details" asp-route-id="@item.DeckId" class="btn btn-dark">Deck Details</a>
+    <a asp-action="Edit" asp-route-id="@item.DeckId" class="btn btn-dark">Edit Deck</a>
+    <a asp-action="Delete" asp-route-id="@item.DeckId" class="btn btn-dark">Delete Deck</a>
         </div>
 }
           

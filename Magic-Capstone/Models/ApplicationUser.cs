@@ -14,18 +14,18 @@ namespace Magic_Capstone.Models
 
         }
 
-        [Required]
+       
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
-        [Required]
+        
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
         [NotMapped]
         [Display(Name = "User Name")]
         public string FullName => $"{FirstName} {LastName}";
 
-        [Required]
+        
         public string StreetAddress { get; set; }
 
         public virtual ICollection<Card> Products { get; set; }

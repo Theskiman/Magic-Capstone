@@ -34,11 +34,9 @@ namespace Magic_Capstone.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired();
+                    b.Property<string>("FirstName");
 
-                    b.Property<string>("LastName")
-                        .IsRequired();
+                    b.Property<string>("LastName");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -58,8 +56,7 @@ namespace Magic_Capstone.Migrations
 
                     b.Property<string>("SecurityStamp");
 
-                    b.Property<string>("StreetAddress")
-                        .IsRequired();
+                    b.Property<string>("StreetAddress");
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -83,7 +80,7 @@ namespace Magic_Capstone.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9a5d0a76-fae7-4878-8e13-9cad7e133cf7",
+                            ConcurrencyStamp = "090709aa-f76d-466b-a58d-f6b91bd3a47a",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             FirstName = "Clifton",
@@ -91,7 +88,7 @@ namespace Magic_Capstone.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA6hA0WiLXvJsROyfCQ8j29vGKllDZf0Mz1yKhbT51+7UISNmgGk5aIUCXXg//zZkg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEElMQxt/RvTa7KOFFU1u3V1HnFZeBiDzI+RcRAhIVgn+Ri3hZBLdlyPi0Fs0bDwATQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             StreetAddress = "123 address street",
@@ -402,7 +399,7 @@ namespace Magic_Capstone.Migrations
             modelBuilder.Entity("Magic_Capstone.Models.CardDeck", b =>
                 {
                     b.HasOne("Magic_Capstone.Models.CardData", "CardData")
-                        .WithMany()
+                        .WithMany("cardDecks")
                         .HasForeignKey("CardDataId")
                         .OnDelete(DeleteBehavior.Cascade);
 

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Magic_Capstone.Migrations
 {
-    public partial class MagicalWorks : Migration
+    public partial class magicalMigrations : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,9 +41,9 @@ namespace Magic_Capstone.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    FirstName = table.Column<string>(nullable: false),
-                    LastName = table.Column<string>(nullable: false),
-                    StreetAddress = table.Column<string>(nullable: false)
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    StreetAddress = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -290,7 +290,7 @@ namespace Magic_Capstone.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "StreetAddress", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "00000000-ffff-ffff-ffff-ffffffffffff", 0, "9a5d0a76-fae7-4878-8e13-9cad7e133cf7", "admin@admin.com", true, "Clifton", "Matuszewski", false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEA6hA0WiLXvJsROyfCQ8j29vGKllDZf0Mz1yKhbT51+7UISNmgGk5aIUCXXg//zZkg==", null, false, "7f434309-a4d9-48e9-9ebb-8803db794577", "123 address street", false, "admin@admin.com" });
+                values: new object[] { "00000000-ffff-ffff-ffff-ffffffffffff", 0, "090709aa-f76d-466b-a58d-f6b91bd3a47a", "admin@admin.com", true, "Clifton", "Matuszewski", false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEElMQxt/RvTa7KOFFU1u3V1HnFZeBiDzI+RcRAhIVgn+Ri3hZBLdlyPi0Fs0bDwATQ==", null, false, "7f434309-a4d9-48e9-9ebb-8803db794577", "123 address street", false, "admin@admin.com" });
 
             migrationBuilder.InsertData(
                 table: "conditions",

@@ -10,9 +10,11 @@ using Microsoft.AspNetCore.Identity;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Magic_Capstone.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
 
@@ -28,7 +30,8 @@ namespace Magic_Capstone.Controllers
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-       public async Task<IActionResult> FindType(string type)
+       
+        public async Task<IActionResult> FindType(string type)
         {
             ApiHelper.InitializeClient();
             string url = $"https://api.magicthegathering.io/v1/cards?type={type}";
@@ -47,6 +50,7 @@ namespace Magic_Capstone.Controllers
             }
 
         }
+        
         public async Task<IActionResult> FindName(string name)
         {
             ApiHelper.InitializeClient();
@@ -66,6 +70,7 @@ namespace Magic_Capstone.Controllers
             }
 
         }
+        
         public async Task<IActionResult> FindColor(string color)
         {
             ApiHelper.InitializeClient();
@@ -84,10 +89,21 @@ namespace Magic_Capstone.Controllers
                 }
             }
         }
+
+
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.cardDatas.Take(20);
-            return View(await applicationDbContext.ToListAsync());
+
+            var currentuser = await GetCurrentUserAsync();
+           
+                var userId = currentuser.Id;
+
+            var applicationDbContext = _context.cardDatas
+                    .Where(cd => cd.UserId == userId)
+                    .Take(20);
+
+                return View(await applicationDbContext.ToListAsync());
+           
         }
 
 

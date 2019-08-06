@@ -8,32 +8,45 @@ using Microsoft.EntityFrameworkCore;
 using Magic_Capstone.Data;
 using Magic_Capstone.Models;
 using Magic_Capstone.Models.DeckViewModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Magic_Capstone.Controllers
 {
+    [Authorize]
     public class DecksController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public DecksController(ApplicationDbContext context)
+        private Task<ApplicationUser> GetCurrentUserAsync() =>
+            _userManager.GetUserAsync(HttpContext.User);
+
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public DecksController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Decks
+        
         public async Task<IActionResult> Index()
         {
-
+            var user = await GetCurrentUserAsync();
+            var userid = user.Id;
 
             var applicationDbContext = _context.decks.Include(d => d.User)
+                .Where(d => d.UserId == userid);
                
-                ;
+                
           
                 
             return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Cards/Details/5
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -69,6 +82,7 @@ namespace Magic_Capstone.Controllers
 
 
         // GET: Decks/Create
+        
         public IActionResult Create()
         {
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
@@ -78,12 +92,15 @@ namespace Magic_Capstone.Controllers
         // POST: Decks/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("DeckName,Description")] Deck deck)
         {
             if (ModelState.IsValid)
             {
+                var currentUser = await GetCurrentUserAsync();
+                deck.UserId = currentUser.Id;
                 _context.Add(deck);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("CardDeck", "CardDecks");
@@ -93,6 +110,7 @@ namespace Magic_Capstone.Controllers
         }
 
         // GET: Decks/Edit/5
+        
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -105,17 +123,22 @@ namespace Magic_Capstone.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", deck.UserId);
+            
+           
             return View(deck);
         }
 
         // POST: Decks/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("DeckId,DeckName,Description,UserId")] Deck deck)
         {
+            var currentUser = await GetCurrentUserAsync();
+           
+            
             if (id != deck.DeckId)
             {
                 return NotFound();
@@ -125,6 +148,7 @@ namespace Magic_Capstone.Controllers
             {
                 try
                 {
+                    
                     _context.Update(deck);
                     await _context.SaveChangesAsync();
                 }
@@ -146,15 +170,20 @@ namespace Magic_Capstone.Controllers
         }
 
         // GET: Decks/Delete/5
+      
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
+            var currentuser = await GetCurrentUserAsync();
 
             var deck = await _context.decks
                 .Include(d => d.User)
+                .Include(d => d.cardDecks)
+                .ThenInclude(cd => cd.CardData)
+                .Where(d => d.DeckId == id)
                 .FirstOrDefaultAsync(m => m.DeckId == id);
             if (deck == null)
             {
@@ -165,14 +194,32 @@ namespace Magic_Capstone.Controllers
         }
 
         // POST: Decks/Delete/5
+       
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var user = await GetCurrentUserAsync();
+            var userid = user.Id;
             var deck = await _context.decks.FindAsync(id);
-            _context.decks.Remove(deck);
+            var cardDatas = _context.cardDatas;
+            var cardDecks = _context.cardDecks;
+
+
+            foreach (CardDeck item in cardDecks)
+            {
+                if (item.DeckId == deck.DeckId && userid == deck.UserId)
+                {
+                    cardDecks.Remove(item);
+                }
+            }
+            if(userid == deck.UserId)
+            {
+                _context.decks.Remove(deck);
+            }
+
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Decks");
         }
 
         public Deck DecksCards(Deck deck)
