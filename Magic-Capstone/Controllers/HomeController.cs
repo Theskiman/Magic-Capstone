@@ -86,7 +86,13 @@ namespace Magic_Capstone.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.cardDatas.Take(20);
+            var currentuser = await GetCurrentUserAsync();
+            var userId = currentuser.Id;
+
+            var applicationDbContext = _context.cardDatas
+                .Where(cd => cd.UserId == userId)
+                .Take(20);
+
             return View(await applicationDbContext.ToListAsync());
         }
 

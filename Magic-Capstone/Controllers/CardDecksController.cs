@@ -31,12 +31,15 @@ namespace Magic_Capstone.Controllers
    
         public async Task<IActionResult> CardDeck()
         {
+            var currentUser = await GetCurrentUserAsync();
+           var userId = currentUser.Id;
+
             var viewModel = new CardDeckViewModel
             {
-                AvailableDecks = await _context.decks.ToListAsync(),
+                AvailableDecks = await _context.decks.Where(d => d.UserId == userId).ToListAsync(),
 
             };
-            viewModel.AvailableDecks = GetAllDecks();
+            
             viewModel.cardDatas = _context.cardDatas.ToList();
             
             return View(viewModel);

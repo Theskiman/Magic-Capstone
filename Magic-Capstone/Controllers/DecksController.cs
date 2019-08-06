@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Magic_Capstone.Data;
 using Magic_Capstone.Models;
 using Magic_Capstone.Models.DeckViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace Magic_Capstone.Controllers
 {
@@ -15,19 +16,27 @@ namespace Magic_Capstone.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public DecksController(ApplicationDbContext context)
+        private Task<ApplicationUser> GetCurrentUserAsync() =>
+            _userManager.GetUserAsync(HttpContext.User);
+
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public DecksController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Decks
         public async Task<IActionResult> Index()
         {
-
+            var user = await GetCurrentUserAsync();
+            var userid = user.Id;
 
             var applicationDbContext = _context.decks.Include(d => d.User)
+                .Where(d => d.UserId == userid);
                
-                ;
+                
           
                 
             return View(await applicationDbContext.ToListAsync());
@@ -84,6 +93,8 @@ namespace Magic_Capstone.Controllers
         {
             if (ModelState.IsValid)
             {
+                var currentUser = await GetCurrentUserAsync();
+                deck.UserId = currentUser.Id;
                 _context.Add(deck);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("CardDeck", "CardDecks");
@@ -152,9 +163,13 @@ namespace Magic_Capstone.Controllers
             {
                 return NotFound();
             }
+            var currentuser = await GetCurrentUserAsync();
 
             var deck = await _context.decks
                 .Include(d => d.User)
+                .Include(d => d.cardDecks)
+                .ThenInclude(cd => cd.CardData)
+                .Where(d => d.DeckId == id)
                 .FirstOrDefaultAsync(m => m.DeckId == id);
             if (deck == null)
             {
@@ -169,10 +184,27 @@ namespace Magic_Capstone.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var user = await GetCurrentUserAsync();
+            var userid = user.Id;
             var deck = await _context.decks.FindAsync(id);
-            _context.decks.Remove(deck);
+            var cardDatas = _context.cardDatas;
+            var cardDecks = _context.cardDecks;
+
+
+            foreach (CardDeck item in cardDecks)
+            {
+                if (item.DeckId == deck.DeckId && userid == deck.UserId)
+                {
+                    cardDecks.Remove(item);
+                }
+            }
+            if(userid == deck.UserId)
+            {
+                _context.decks.Remove(deck);
+            }
+
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Decks");
         }
 
         public Deck DecksCards(Deck deck)
