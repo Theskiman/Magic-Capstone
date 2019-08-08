@@ -28,7 +28,7 @@ namespace Magic_Capstone.Controllers
         }
 
      
-
+        //Simple Get all method getting all cardData instances in database to display to the user (based on user Id on card)
         // GET: Cards
         [Authorize]
         public async Task<IActionResult> Index()
@@ -37,31 +37,12 @@ namespace Magic_Capstone.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Cards/Details/5
-     /*   public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var card = await _context.cards
-              
-                .Include(c => c.User)
-                .FirstOrDefaultAsync(m => m.CardId == id);
-            if (card == null)
-            {
-                return NotFound();
-            }
-
-            return View(card);
-        }*/
 
    
 
         // POST: Cards/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //Save method for when the user searches the API for cards and clicks on a card the associated card is saved as a CardData item to the Database
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -89,7 +70,7 @@ namespace Magic_Capstone.Controllers
        
 
        
-
+        //Delete method to delete a cardData item by its given ID
         // POST: Cards/Delete/5
         [Authorize]
         [HttpPost, ActionName("Delete")]

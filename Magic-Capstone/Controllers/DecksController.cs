@@ -30,7 +30,7 @@ namespace Magic_Capstone.Controllers
         }
 
         // GET: Decks
-        
+        //Simple method to get all decks associated with the current logged in user
         public async Task<IActionResult> Index()
         {
             var user = await GetCurrentUserAsync();
@@ -46,8 +46,8 @@ namespace Magic_Capstone.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Cards/Details/5
-        
+        // GET: Decks/Details/5
+        //Method to show the details of its deck including all of the cards associated with the deck 
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -83,7 +83,7 @@ namespace Magic_Capstone.Controllers
 
 
         // GET: Decks/Create
-        
+        //Method to create a deck then take you to the page that allows you to add cards to the deck
         public IActionResult Create()
         {
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
@@ -111,7 +111,7 @@ namespace Magic_Capstone.Controllers
         }
 
         // GET: Decks/Edit/5
-        
+        //Simple method allowing users to edit the decks Name and its Description
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -171,7 +171,7 @@ namespace Magic_Capstone.Controllers
         }
 
         // GET: Decks/Delete/5
-      
+      //Delete method that allows users to delete a deck along with every cardDeck join table item associated with it based on the decks ID
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -222,7 +222,7 @@ namespace Magic_Capstone.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Decks");
         }
-
+        //Method to get all CardDeck items associated with a deck based on the deckId
         public Deck DecksCards(Deck deck)
         {
             foreach (CardDeck item in _context.cardDecks)

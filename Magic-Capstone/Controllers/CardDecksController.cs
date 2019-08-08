@@ -28,7 +28,7 @@ namespace Magic_Capstone.Controllers
             _userManager = userManager;
         }
 
-        // GET: CardDecks all cardDatas to display and save cards to a new deck
+        // GET: Gets all CardData instances in database and also gets all decks associated with the user
         [Authorize]
         public async Task<IActionResult> CardDeck()
         {
@@ -49,8 +49,8 @@ namespace Magic_Capstone.Controllers
 
       
         // POST: CardDecks/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+       //Method to Save CardDatas to the CardDeck join table in order to create decks for the user method does a foreach 
+       //with the Ids of the cards in order to allow the user to check multiple cards and save them all at once
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -88,30 +88,13 @@ namespace Magic_Capstone.Controllers
         }
 
 
-        // GET: CardDecks/Details/5
-        /*  public async Task<IActionResult> Details(int? id)
-          {
-              if (id == null)
-              {
-                  return NotFound();
-              }
-
-              var cardDeck = await _context.cardDecks
-                  .Include(c => c.Card)
-                  .Include(c => c.Deck)
-                  .FirstOrDefaultAsync(m => m.CardDeckId == id);
-              if (cardDeck == null)
-              {
-                  return NotFound();
-              }
-
-              return View(cardDeck);
-          }*/
+     
 
 
 
 
         // POST: CardDecks/Delete/5
+        //Delete Method that deletes The join table item by its Id
         [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
