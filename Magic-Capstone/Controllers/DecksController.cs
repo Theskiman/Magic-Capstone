@@ -37,6 +37,7 @@ namespace Magic_Capstone.Controllers
             var userid = user.Id;
 
             var applicationDbContext = _context.decks.Include(d => d.User)
+
                 .Where(d => d.UserId == userid);
                
                 

@@ -3,6 +3,10 @@
     height: 475px;
 }
 
+#magicMagic {
+    width: 250px;
+    height: 375px;
+}
 
 
 .cardflex {
@@ -13,4 +17,17 @@
 
 #UpdateCurrent{
     margin-left: 777px;
+}
+
+#checkmark {
+    
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+}
+
+#checkFlex{
+    display: flex;
+    flex-direction: column-reverse;
+
 }

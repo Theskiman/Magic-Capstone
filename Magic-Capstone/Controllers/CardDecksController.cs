@@ -45,29 +45,46 @@ namespace Magic_Capstone.Controllers
             
             return View(viewModel);
         }
+
+
+      
         // POST: CardDecks/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SaveCard(CardDeck cardDeck)
+        public async Task<IActionResult> SaveCard(CardDeck cardDeck, List<int> CardIds)
         {
             string referer = Request.Headers["Referer"].ToString();
-           
+            ModelState.Remove("CardDataId");
             if (ModelState.IsValid)
             {
+                CardDeckViewModel viewModel = new CardDeckViewModel();
+
                 cardDeck.DeckId = cardDeck.Deck.DeckId;
+                
                 cardDeck.Deck = null;
                 cardDeck.CardData = null;
+
+                viewModel.CardDataIds = CardIds;
                 
-                _context.Add(cardDeck);
+                
+                foreach(var id in CardIds)
+                {
+                    CardDeck newCard = new CardDeck
+                    {
+                        DeckId = cardDeck.DeckId,
+                        CardDataId = id
+                    };
+                    _context.Add(newCard);
+                };
                 
                 await _context.SaveChangesAsync();
                 
             }
             
-            return Redirect(referer);
+            return RedirectToAction("Index", "Decks");
         }
 
 
