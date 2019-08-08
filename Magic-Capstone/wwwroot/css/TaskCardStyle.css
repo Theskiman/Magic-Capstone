@@ -3,9 +3,8 @@
     height: 475px;
 }
 
-#magicMagic {
-    width: 250px;
-    height: 375px;
+.centerCards{
+    text-align: center;
 }
 
 

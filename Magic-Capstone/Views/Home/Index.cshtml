@@ -33,14 +33,17 @@
         </div>
         <a asp-action="Create" asp-controller="Decks" class="btn btn-dark">Create New Deck</a>
         <a asp-action="CardDeck" asp-controller="CardDecks" class="btn btn-dark" id="UpdateCurrent">Update Current Decks</a>
-        <div class="centerCards">
 
             <h2>Recent Cards</h2>
+<h4>Just click on a card if you wish to delete it!</h4>
+        <div class="centerCards, cardflex">
 
             @foreach (var item in Model)
             {
-                <img class="img-responsive" src=@item.imageUrl id="magic" />
-            }
+                <form asp-action="Delete" asp-controller="Cards">
+                    <button type="submit" name="CardDataId" value="@item.CardDataId"><img class="img-responsive" src=@item.imageUrl id="magic" /></button>
+                    </form>
+                    }
 
-        </div>
+            </div>
    

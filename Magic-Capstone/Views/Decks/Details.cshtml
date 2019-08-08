@@ -4,12 +4,12 @@
     ViewData["Title"] = "Details";
 }
     <link rel="stylesheet" href="~/css/TaskCardStyle.css">
-    <h4>To delete a card from your deck just click on the card you wish to delete</h4>
 
 <div>
-    <h1>@Model.DeckName Details</h1>
+    <h1 class="centerCards">@Model.DeckName Details</h1>
+    <h2 class="centerCards">@Model.Description</h2>
     <hr />
-    <h2>@Model.Description</h2>
+    <h4 class="centerCards">To delete a card from your deck just click on the card you wish to delete</h4>
     <div class="cardflex">
        @foreach(var item in Model.cardDecks)
        {
