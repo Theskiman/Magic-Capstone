@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,5 +13,7 @@ namespace Magic_Capstone.Models
         public CardData CardData { get; set; }
         public int DeckId { get; set; }
         public Deck Deck { get; set; }
+        
+        
     }
 }

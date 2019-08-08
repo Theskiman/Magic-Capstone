@@ -2,44 +2,45 @@
     @{
         ViewData["Title"] = "Index";
     }
+ 
+        <link rel="stylesheet" href="~/css/HomeStyle.css">
+        <link rel="stylesheet" href="~/css/TaskCardStyle.css">
 
-    <link rel="stylesheet" href="~/css/HomeStyle.css">
-    <link rel="stylesheet" href="~/css/TaskCardStyle.css">
+        <h1>Magical Search!</h1>
 
-    <h1>Magical Search!</h1>
+        <div class="flexClass">
+            <form>
+                <p class="onTop">
+                    <input type="text" name="type" class="searchBox">
+                    <input type="submit" value="Search By Type" asp-action="FindType" class="btn btn-dark" />
+                </p>
+            </form>
 
-    <div class="flexClass">
-        <form>
-            <p class="onTop">
-                <input type="text" name="type" class="searchBox">
-                <input type="submit" value="Search By Type" asp-action="FindType" class="btn btn-dark" />
-            </p>
-        </form>
+            <form>
+                <p class="onTop">
+                    <input type="text" name="name" class="searchBox">
+                    <input type="submit" value="Search By Name" asp-action="FindName" class="btn btn-dark" />
 
-        <form>
-            <p class="onTop">
-                <input type="text" name="name" class="searchBox">
-                <input type="submit" value="Search By Name" asp-action="FindName" class="btn btn-dark" />
+                </p>
+            </form>
 
-            </p>
-        </form>
+            <form>
+                <p class="onTop">
+                    <input type="text" name="color" class="searchBox">
+                    <input type="submit" value="Search By Color" asp-action="FindColor" class="btn btn-dark" />
+                </p>
+            </form>
+        </div>
+        <a asp-action="Create" asp-controller="Decks" class="btn btn-dark">Create New Deck</a>
+        <a asp-action="CardDeck" asp-controller="CardDecks" class="btn btn-dark" id="UpdateCurrent">Update Current Decks</a>
+        <div class="centerCards">
 
-        <form>
-            <p class="onTop">
-                <input type="text" name="color" class="searchBox">
-                <input type="submit" value="Search By Color" asp-action="FindColor" class="btn btn-dark" />
-            </p>
-        </form>
-    </div>
-    <a asp-action="Create" asp-controller="Decks" class="btn btn-dark">Create New Deck</a>
-    <a asp-action="CardDeck" asp-controller="CardDecks" class="btn btn-dark" id="UpdateCurrent">Update Current Decks</a>
-    <div class="centerCards">
+            <h2>Recent Cards</h2>
 
-        <h2>Recent Cards</h2>
+            @foreach (var item in Model)
+            {
+                <img class="img-responsive" src=@item.imageUrl id="magic" />
+            }
 
-        @foreach (var item in Model)
-        {
-            <img class="img-responsive" src=@item.imageUrl id="magic" />
-        }
-
-    </div>
+        </div>
+   

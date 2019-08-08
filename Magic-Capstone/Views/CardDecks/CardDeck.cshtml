@@ -13,7 +13,7 @@
 
 <div class="form-group">
     <label asp-for="Deck.DeckId" class="control-label">Deck Name</label>
-    <select asp-for="Deck.DeckId" class="form-control" asp-items="@Model.DeckOptions"></select>
+    <select asp-for="Deck.DeckId" class="form-control" asp-items="@Model.DeckOptions" ></select>
 </div>
             <div class="cardflex">
 @foreach (var item in Model.cardDatas)
@@ -21,13 +21,12 @@
     <div class="cardInfo">
        
       
-        <div class="form-group">
-
-            <button type="submit" name="CardDataId" value="@item.CardDataId"><img src="@item.imageUrl" id="magic"></button>
+        <div class="form-group" id="checkFlex">
+            <input name="CardIds" type="checkbox" value="@item.CardDataId" id="checkmark" />
+            <img src="@item.imageUrl" id="magic">
         </div>
         </div>
 }
                 </div>
+<button type="submit" name="CardDataId" value="@Model.CardDataIds" class="btn btn-dark">Finish</button>
 </form>
-<a asp-action="Index" asp-controller="Decks" class="btn btn-dark">Finish</a>
-
