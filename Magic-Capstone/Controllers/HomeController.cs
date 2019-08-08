@@ -30,7 +30,7 @@ namespace Magic_Capstone.Controllers
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-       
+       //Method that takes the string passed into the input field and pings the external api for type based on the string
         public async Task<IActionResult> FindType(string type)
         {
             ApiHelper.InitializeClient();
@@ -50,7 +50,7 @@ namespace Magic_Capstone.Controllers
             }
 
         }
-        
+        //Method that takes the string passed into the input field and pings the external api for Name based on the string
         public async Task<IActionResult> FindName(string name)
         {
             ApiHelper.InitializeClient();
@@ -70,7 +70,7 @@ namespace Magic_Capstone.Controllers
             }
 
         }
-        
+        //Method that takes the string passed into the input field and pings the external api for color based on the string
         public async Task<IActionResult> FindColor(string color)
         {
             ApiHelper.InitializeClient();
@@ -90,7 +90,7 @@ namespace Magic_Capstone.Controllers
             }
         }
 
-
+        //Method to get the last 20 cards added to the database and displays them on the home page under the search bars
         public async Task<IActionResult> Index()
         {
 
